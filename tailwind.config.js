@@ -16,6 +16,7 @@ module.exports = {
         active: 'var(--bg-active)',
         base: {
           DEFAULT: '#2E2E33',
+          100: '#141416',
           400: '#242627',
         },
       },

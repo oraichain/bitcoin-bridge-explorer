@@ -55,11 +55,14 @@ export const useIBCModule = defineStore('module-ibc', {
     fetchConnection(path: string) {
       const client = new ChainRegistryClient();
       client.fetchIBCPathInfo(path).then((res) => {
-        const connId =
+        const isFirstChain =
           res.chain_1.chain_name === this.chain.current?.prettyName ||
-          this.chain.chainName
-            ? res.chain_1.connection_id
-            : res.chain_2.connection_id;
+          res.chain_1.chain_name === this.chain.chainName;
+
+        const connId = isFirstChain
+          ? res.chain_1.connection_id
+          : res.chain_2.connection_id;
+
         this.registryConf = res;
         this.showConnection(connId);
       });

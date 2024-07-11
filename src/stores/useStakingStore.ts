@@ -76,7 +76,7 @@ export const useStakingStore = defineStore('stakingStore', {
       }
     },
     async fetchAcitveValdiators() {
-      return await this.fetchValidators('BOND_STATUS_BONDED');
+      return this.fetchValidators('BOND_STATUS_BONDED', 500);
     },
     async fetchInacitveValdiators() {
       return await this.fetchValidators('BOND_STATUS_UNBONDED');
@@ -155,11 +155,14 @@ export const useStakingStore = defineStore('stakingStore', {
         const { prefix } = fromBech32(val.operatorAddress);
         await this.fetchKeyRotation(
           chain_id,
-          pubKeyToValcons(val.consensusPubkey!, prefix.replace('valoper', ''))
+          pubKeyToValcons(
+            val.consensusPubkey!,
+            prefix.replace('valoper', 'valcons')
+          )
         );
       }
     },
-    async fetchValidators(status: BondStatusString) {
+    async fetchValidators(status: BondStatusString, limit = 300) {
       let client;
       if (this.blockchain.isConsumerChain) {
         if (

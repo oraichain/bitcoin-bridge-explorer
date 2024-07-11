@@ -36,17 +36,17 @@ export const requests: Partial<RequestRegistry> = {
   gov_params_deposit: { url: '/cosmos/gov/v1/params/deposit', adapter },
   gov_proposals: {
     url: '/cosmos/gov/v1/proposals',
-    adapter: (source: any): PaginatedProposals => {
+    adapter: (source: any): Promise<PaginatedProposals> => {
       const proposals = source.proposals.map((p: any) => proposalAdapter(p));
-      return {
+      return Promise.resolve({
         proposals,
         pagination: source.pagination,
-      };
+      });
     },
   },
   gov_proposals_proposal_id: {
     url: '/cosmos/gov/v1/proposals/{proposal_id}',
-    adapter: (source: any): { proposal: GovProposal } => {
+    adapter: async (source: any): Promise<{ proposal: GovProposal }> => {
       return {
         proposal: proposalAdapter(source.proposal),
       };

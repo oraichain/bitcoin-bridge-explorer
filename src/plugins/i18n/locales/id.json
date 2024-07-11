@@ -21,12 +21,12 @@
     "links": "Tautan"
   },
   "pages": {
-    "title": "OraiScan Dashboard",
+    "title": "Ping Dashboard",
     "title_all": "404",
     "tag": "Beta",
     "tag_all": "Halaman Tidak Ditemukan",
-    "slogan": "OraiScan Dashboard bukan hanya sebuah penjelajah tetapi juga sebuah dompet dan masih banyak lagi ... 🛠",
-    "description": "Cosmos Ecosystem Blockchains",
+    "slogan": "Ping Dashboard bukan hanya sebuah penjelajah tetapi juga sebuah dompet dan masih banyak lagi ... 🛠",
+    "description": "Cosmos Ecosystem Blockchains 🚀",
     "search_placeholder": "Telusuri Rantai",
     "description_all": "Kami tidak dapat menemukan halaman yang anda cari.",
     "btn_index": "Kembali ke awal"
@@ -254,7 +254,11 @@
     "signed_blocks": "Blok Tersign",
     "missing_blocks": "Blok yang Hilang",
     "add_validators": "Tambahkan Validator",
-    "add": "Tambahkan"
+    "add": "Tambahkan",
+    "legend": "Legend",
+    "committed": "Committed",
+    "precommitted": "Precommitted",
+    "missed": "Missed"
   },
   "widget": {
     "title": "Pengaturan Awal",
@@ -270,7 +274,6 @@
     "close": "Tutup",
     "buy": "Beli",
     "active_proposals": "Proposal Aktif",
-    "metric": "Metrics",
     "no_active_proposals": "Tidak ada proposal aktif",
     "more": "Selengkapnya",
     "reward": "Hadiah",

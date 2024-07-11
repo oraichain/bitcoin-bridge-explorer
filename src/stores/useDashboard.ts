@@ -59,6 +59,7 @@ export interface ChainConfig {
   prettyName: string;
   cosmwasmEnabled: boolean;
   bech32Prefix: string;
+  bech32ConsensusPrefix: string;
   chainId: string;
   coinType: string;
   assets: Asset[];
@@ -87,10 +88,17 @@ export interface ChainConfig {
     average: number;
     high: number;
   };
+  faucet?: {
+    amount: string;
+    ip_limit: number;
+    address_limit: number;
+    fees: string;
+  };
 }
 
 export interface LocalConfig {
   addr_prefix: string;
+  consensus_prefix?: string;
   alias: string;
   api: string[] | Endpoint[];
   rpc: string[] | Endpoint[];
@@ -120,6 +128,12 @@ export interface LocalConfig {
     high: number;
   };
   keplr_features: string[];
+  faucet?: {
+    amount: string;
+    ip_limit: number;
+    address_limit: number;
+    fees: string;
+  };
 }
 
 function apiConverter(api: any[]) {
@@ -140,24 +154,27 @@ function apiConverter(api: any[]) {
 
 export function fromLocal(lc: LocalConfig): ChainConfig {
   const conf = {} as ChainConfig;
-  conf.assets = lc.assets.map((x) => ({
-    name: x.base,
-    base: x.base,
-    display: x.symbol,
-    symbol: x.symbol,
-    logo_URIs: { svg: x.logo },
-    coingecko_id: x.coingecko_id,
-    exponent: x.exponent,
-    denom_units: [
-      { denom: x.base, exponent: 0 },
-      { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
-    ],
-  }));
-  conf.cosmwasmEnabled = lc.cosmwasm_enabled ?? false;
+  if (lc.assets && Array.isArray(lc.assets)) {
+    conf.assets = lc.assets.map((x) => ({
+      name: x.base,
+      base: x.base,
+      display: x.symbol,
+      symbol: x.symbol,
+      logo_URIs: { svg: x.logo },
+      coingecko_id: x.coingecko_id,
+      exponent: x.exponent,
+      denom_units: [
+        { denom: x.base, exponent: 0 },
+        { denom: x.symbol.toLowerCase(), exponent: Number(x.exponent) },
+      ],
+    }));
+  }
   conf.versions = {
     cosmosSdk: lc.sdk_version,
   };
   conf.bech32Prefix = lc.addr_prefix;
+  conf.bech32ConsensusPrefix =
+    lc.consensus_prefix ?? lc.addr_prefix + 'valcons';
   conf.chainName = lc.chain_name;
   conf.coinType = lc.coin_type;
   conf.prettyName = lc.registry_name || lc.chain_name;
@@ -173,10 +190,13 @@ export function fromLocal(lc: LocalConfig): ChainConfig {
     };
   }
   conf.features = lc.features;
-  conf.logo = lc.logo;
+  conf.logo = lc.logo.startsWith('http')
+    ? lc.logo
+    : `https://ping.pub${lc.logo}`;
   conf.keplrFeatures = lc.keplr_features;
   conf.keplrPriceStep = lc.keplr_price_step;
   conf.themeColor = lc.theme_color;
+  conf.faucet = lc.faucet;
   return conf;
 }
 
@@ -186,6 +206,7 @@ export function fromDirectory(source: DirectoryChain): ChainConfig {
 
   (conf.assets = source.assets),
     (conf.bech32Prefix = source.bech32_prefix),
+    (conf.bech32ConsensusPrefix = source.bech32_prefix + 'valcons'),
     (conf.chainId = source.chain_id),
     (conf.chainName = source.chain_name),
     (conf.prettyName = source.pretty_name),
@@ -295,7 +316,7 @@ export const useDashboard = defineStore('dashboard', {
       const keys = Object.keys(this.chains); // load all blockchain
       // Object.keys(this.favoriteMap) //only load favorite once it has too many chains
       keys.forEach((k) => {
-        if (this.chains[k])
+        if (Array.isArray(this.chains[k]?.assets))
           this.chains[k].assets.forEach((a) => {
             if (a.coingecko_id !== undefined && a.coingecko_id.length > 0) {
               coinIds.push(a.coingecko_id);

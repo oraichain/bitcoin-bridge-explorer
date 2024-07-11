@@ -5,7 +5,7 @@ import {
   PageRequest,
   type AuthAccount,
   type Pagination,
-  type Coin,
+  type CoinWithPrice,
 } from '@/types';
 import { onMounted } from 'vue';
 import PaginationBar from '@/components/PaginationBar.vue';
@@ -15,7 +15,7 @@ const props = defineProps(['chain']);
 const format = useFormatter();
 const chainStore = useBlockchain();
 
-const list = ref([] as Coin[]);
+const list = ref([] as CoinWithPrice[]);
 
 function showType(v: string) {
   return v.replace('/cosmos.auth.v1beta1.', '');

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 // Components
 import newFooter from '@/layouts/components/NavFooter.vue';
@@ -8,9 +8,10 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue';
 import NavbarSearch from '@/layouts/components/NavbarSearch.vue';
 import ChainProfile from '@/layouts/components/ChainProfile.vue';
 
-import { useDashboard } from '@/stores/useDashboard';
-import { useBlockchain } from '@/stores';
 import { useRouter } from 'vue-router';
+
+import { NetworkType, useDashboard } from '@/stores/useDashboard';
+import { useBaseStore, useBlockchain } from '@/stores';
 
 import NavBarI18n from './NavBarI18n.vue';
 import NavBarWallet from './NavBarWallet.vue';
@@ -20,11 +21,13 @@ import type {
   NavSectionTitle,
   VerticalNavItems,
 } from '../types';
+import dayjs from 'dayjs';
 
 const dashboard = useDashboard();
 dashboard.initial();
 const blockchain = useBlockchain();
 blockchain.randomSetupEndpoint();
+const baseStore = useBaseStore();
 
 const current = ref(''); // the current chain
 const temp = ref('');
@@ -97,6 +100,16 @@ function confirm() {
     }
   }
 }
+const blocktime = computed(() => {
+  return dayjs(baseStore.latest?.block?.header?.time?.toISOString());
+});
+
+const behind = computed(() => {
+  const current = dayjs().subtract(10, 'minute');
+  return blocktime.value.isBefore(current);
+});
+
+dayjs();
 </script>
 
 <template>
@@ -136,6 +149,7 @@ function confirm() {
           }"
         >
           <input
+            v-if="index > 0"
             type="checkbox"
             class="cursor-pointer !h-10 block"
             @click="changeOpen(index)"
@@ -212,6 +226,29 @@ function confirm() {
                   }"
                 >
                   {{ item?.title === 'Favorite' ? el?.title : $t(el?.title) }}
+                </div>
+              </RouterLink>
+            </div>
+            <div
+              v-if="
+                index === 0 && dashboard.networkType === NetworkType.Testnet
+              "
+              class="menu bg-base-100 w-full !p-0"
+            >
+              <RouterLink
+                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                :to="`/${blockchain.chainName}/faucet`"
+              >
+                <Icon icon="mdi:chevron-right" class="mr-2 ml-3"></Icon>
+                <div
+                  class="text-base capitalize text-gray-500 dark:text-gray-300"
+                >
+                  Faucet
+                </div>
+                <div
+                  class="badge badge-sm text-white border-none badge-error ml-auto"
+                >
+                  New
                 </div>
               </RouterLink>
             </div>
@@ -382,6 +419,28 @@ function confirm() {
 
       <!-- 👉 Pages -->
       <div style="min-height: calc(100vh - 180px)" class="px-0">
+        <div v-if="behind" class="alert alert-error mb-4">
+          <div class="flex gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="stroke-current flex-shrink-0 w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span
+              >{{ $t('pages.out_of_sync') }} {{ blocktime.format() }} ({{
+                blocktime.fromNow()
+              }})</span
+            >
+          </div>
+        </div>
         <RouterView v-slot="{ Component }">
           <Transition mode="out-in">
             <Component :is="Component" />

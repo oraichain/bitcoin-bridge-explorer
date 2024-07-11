@@ -78,6 +78,27 @@ store.fetchProposal(props.proposal_id).then((res) => {
       });
     });
   }
+
+  // const msgType = proposalDetail?.content?.['@type'] || '';
+  // if(msgType.endsWith('MsgUpdateParams')) {
+  //   if(msgType.indexOf('staking') > -1) {
+  //     chainStore.rpc.getStakingParams().then((res) => {
+  //       addCurrentParams(res);
+  //     });
+  //   } else if(msgType.indexOf('gov') > -1) {
+  //     chainStore.rpc.getGovParamsVoting().then((res) => {
+  //       addCurrentParams(res);
+  //     });
+  //   } else if(msgType.indexOf('distribution') > -1) {
+  //     chainStore.rpc.getDistributionParams().then((res) => {
+  //       addCurrentParams(res);
+  //     });
+  //   } else if(msgType.indexOf('slashing') > -1) {
+  //     chainStore.rpc.getSlashingParams().then((res) => {
+  //       addCurrentParams(res);
+  //     });
+  //   }
+  // }
 });
 
 const proposalRest = computed(() => {
@@ -86,6 +107,12 @@ const proposalRest = computed(() => {
   return rest;
 });
 
+// function addCurrentParams(res: any) {
+//   if(proposal.value.content && res.params) {
+//     proposal.value.content.params = [proposal.value.content?.params];
+//     proposal.value.content.current = [res.params];
+//   }
+// }
 const color = computed(() => {
   if (proposal.value.status === ProposalStatus.PROPOSAL_STATUS_PASSED) {
     // 'PROPOSAL_STATUS_PASSED') {
@@ -142,7 +169,9 @@ const upgradeCountdown = computed((): number => {
   if (height > 0) {
     const base = useBaseStore();
     const current = Number(base.latest?.block?.header?.height || 0);
-    return (height - current) * 6 * 1000;
+    return (
+      (height - current) * Number((base.blocktime / 1000).toFixed()) * 1000
+    );
   }
   const now = new Date();
   const end = upgradeSoftware.plan?.time

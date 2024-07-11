@@ -128,7 +128,6 @@ import { convertStr } from './utils';
 import { AccessType } from 'cosmjs-types/cosmwasm/wasm/v1/types';
 import type { JsonObject } from '@cosmjs/cosmwasm-stargate';
 import { Decimal } from '@cosmjs/math';
-import { assert } from '@cosmjs/utils';
 
 export const DEFAULT_SDK_VERSION = '0.45.16';
 export const LCD_FALLBACK_CHAINS = ['OraiBtcMainnet'];
@@ -628,7 +627,7 @@ export class BaseRestClient<R extends AbstractRegistry> {
     request: Request<T>,
     args: Record<string, any>,
     query = '',
-    adapter?: (source: any) => T
+    adapter?: (source: any) => Promise<T>
   ) {
     let url = request.url;
     if (!url.startsWith('http')) {
@@ -908,13 +907,12 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     const res = await this.queryClient.gov.tally(proposal_id);
     console.log(res);
     return res;
-
     // return this.request(
     //   this.registry.gov_proposals_tally,
     //   { proposal_id },
     //   undefined,
     //   (source: any) => {
-    //     return {
+    //     return Promise.resolve({
     //       tally: {
     //         yes: source.tally.yes || source.tally.yes_count,
     //         abstain: source.tally.abstain || source.tally.abstain_count,
@@ -922,7 +920,7 @@ export class CosmosRestClient extends BaseRestClient<RequestRegistry> {
     //         no_with_veto:
     //           source.tally.no_with_veto || source.tally.no_with_veto_count,
     //       },
-    //     };
+    //     });
     //   }
     // );
   }

@@ -1,29 +1,17 @@
 {
   "chain_name": "axelar",
   "api": [
-    "https://api-axelar-ia.cosmosia.notional.ventures",
-    "https://lcd-axelar.imperator.co",
-    "https://axelar-lcd.quickapi.com",
-    "https://axelar-api.polkachu.com",
-    "https://axelar-lcd.qubelabs.io",
-    "https://axelar-rest.chainode.tech",
-    "https://axelar-lcd.quantnode.tech",
-    "https://api-1.axelar.nodes.guru:443"
+    "https://rest.axelar.lava.build/lava-referer-97409c72-1a82-4861-8651-119c15151cbe"
   ],
   "rpc": [
-    "https://rpc-axelar-ia.cosmosia.notional.ventures:443",
-    "https://rpc-axelar.imperator.co:443",
-    "https://axelar-rpc.quickapi.com:443",
-    "https://axelar-rpc.pops.one:443",
-    "https://axelar-rpc.chainode.tech:443",
-    "https://axelar-rpc.polkachu.com:443"
+    "https://tm.axelar.lava.build/lava-referer-97409c72-1a82-4861-8651-119c15151cbe"
   ],
   "snapshot_provider": "",
   "sdk_version": "0.45.6",
   "coin_type": "118",
   "min_tx_fee": "800",
   "addr_prefix": "axelar",
-  "logo": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axelar-chain-logo.png",
+  "logo": "/logos/axelar.svg",
   "theme_color": "#161723",
   "assets": [
     {
@@ -82,6 +70,5 @@
       "coingecko_id": "polkadot",
       "logo": "/logos/dot.svg"
     }
-  ],
-  "cosmwasm_enabled": false
+  ]
 }

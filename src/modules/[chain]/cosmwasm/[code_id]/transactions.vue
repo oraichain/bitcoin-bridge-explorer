@@ -43,6 +43,20 @@ const balances = ref({} as Coin[]);
 
 const contractAddress = String(route.query.contract);
 
+const history = JSON.parse(localStorage.getItem('contract_history') || '{}');
+
+if (history[chainStore.chainName]) {
+  if (!history[chainStore.chainName].includes(contractAddress)) {
+    history[chainStore.chainName].push(contractAddress);
+    if (history[chainStore.chainName].length > 10) {
+      history[chainStore.chainName].shift();
+    }
+  }
+} else {
+  history[chainStore.chainName] = [contractAddress];
+}
+localStorage.setItem('contract_history', JSON.stringify(history));
+
 onMounted(() => {
   const address = contractAddress;
   wasmStore.wasmClient.getWasmContractInfo(address).then((x) => {

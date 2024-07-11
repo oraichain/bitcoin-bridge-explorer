@@ -6,6 +6,8 @@ import type { BlockResponse } from '@cosmjs/tendermint-rpc';
 import { computed, ref } from '@vue/reactivity';
 import { watchEffect } from 'vue';
 import { onBeforeRouteUpdate } from 'vue-router';
+import TxsInBlocksChart from '@/components/charts/TxsInBlocksChart.vue';
+
 const props = defineProps(['chain']);
 
 const base = useBaseStore();
@@ -86,6 +88,8 @@ onBeforeRouteUpdate(async (to, from, next) => {
     </div>
 
     <div v-show="tab === 'blocks'" class="grid grid-cols-1 gap-3">
+      <TxsInBlocksChart />
+
       <div class="bg-base-100 overflow-x-auto w-full rounded-2xl mb-4 px-5">
         <table class="table w-full table-compact">
           <thead class="border border-base-200">

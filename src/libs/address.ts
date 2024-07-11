@@ -1,8 +1,7 @@
 import {
+  toBase64,
   fromBase64,
   fromBech32,
-  fromHex,
-  toBase64,
   toBech32,
   toHex,
 } from '@cosmjs/encoding';

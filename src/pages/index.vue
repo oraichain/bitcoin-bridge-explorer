@@ -6,7 +6,9 @@ import {
   type ChainConfig,
 } from '@/stores/useDashboard';
 import ChainSummary from '@/components/ChainSummary.vue';
-import { computed, ref } from 'vue';
+import AdBanner from '@/components/ad/AdBanner.vue';
+
+import { computed, onMounted, ref } from 'vue';
 import { useBlockchain } from '@/stores';
 
 const dashboard = useDashboard();
@@ -106,3 +108,4 @@ const chainStore = useBlockchain();
   fill: #171d30;
 }
 </style>
+@/components/ad/ad

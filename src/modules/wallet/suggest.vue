@@ -9,6 +9,7 @@ import {
 } from '@/stores';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
+import AdBanner from '@/components/ad/AdBanner.vue';
 
 const error = ref('');
 const conf = ref('');

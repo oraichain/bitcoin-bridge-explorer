@@ -21,6 +21,7 @@ import ArrayObjectElement from '@/components/dynamic/ArrayObjectElement.vue';
 
 import sendImg from '../../assets/images/svg/send.svg';
 import delegateImg from '../../assets/images/svg/delegate.svg';
+import AdBanner from '@/components/ad/AdBanner.vue';
 
 const props = defineProps(['chain']);
 
@@ -391,6 +392,12 @@ const amount = computed({
         </div>
       </div>
     </div>
+
+    <!-- <div class="grid grid-cols-1 gap-4 md:!grid-cols-3 lg:!grid-cols-6 mt-4">
+      <div v-for="(item, key) in store.stats" :key="key">
+        <CardStatisticsVertical v-bind="item" />
+      </div>
+    </div> -->
 
     <div
       v-if="blockchain.supportModule('governance')"

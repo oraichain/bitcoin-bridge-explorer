@@ -45,7 +45,7 @@ import semver from 'semver';
 import type { Coin } from 'cosmjs-types/cosmos/base/v1beta1/coin';
 export interface Request<T> {
   url: string;
-  adapter: (source: any) => T;
+  adapter: (source: any) => Promise<T>;
 }
 
 export interface AbstractRegistry {
@@ -156,7 +156,7 @@ export interface RequestRegistry extends AbstractRegistry {
   }>;
 }
 
-export function adapter<T>(source: any): T {
+export function adapter<T>(source: any): Promise<T> {
   return source;
 }
 

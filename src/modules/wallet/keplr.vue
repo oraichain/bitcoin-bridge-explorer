@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useDashboard, type ChainConfig, useBlockchain } from '@/stores';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
+import AdBanner from '@/components/ad/AdBanner.vue';
 
 const error = ref('');
 const conf = ref('');
@@ -111,6 +112,7 @@ function suggest() {
         Add {{ selected.chainName }} TO Keplr Wallet
       </button>
     </div>
+
     <div class="text-main mt-5">
       <textarea
         v-model="conf"

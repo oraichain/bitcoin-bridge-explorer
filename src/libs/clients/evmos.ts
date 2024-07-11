@@ -24,7 +24,7 @@ function proposalAdapter(p: any): GovProposal {
 export const requests: Partial<RequestRegistry> = {
   mint_inflation: {
     url: '/evmos/inflation/v1/inflation_rate',
-    adapter: (data: any) => ({
+    adapter: async (data: any) => ({
       inflation: (Number(data.inflation_rate || 0) / 100).toFixed(2),
     }),
   },
@@ -33,7 +33,7 @@ export const requests: Partial<RequestRegistry> = {
   gov_params_deposit: { url: '/cosmos/gov/v1/params/deposit', adapter },
   gov_proposals: {
     url: '/cosmos/gov/v1/proposals',
-    adapter: (source: any): PaginatedProposals => {
+    adapter: async (source: any): Promise<PaginatedProposals> => {
       const proposals = source.proposals.map((p: any) => proposalAdapter(p));
       return {
         proposals,
@@ -43,7 +43,7 @@ export const requests: Partial<RequestRegistry> = {
   },
   gov_proposals_proposal_id: {
     url: '/cosmos/gov/v1/proposals/{proposal_id}',
-    adapter: (source: any): { proposal: GovProposal } => {
+    adapter: async (source: any): Promise<{ proposal: GovProposal }> => {
       return {
         proposal: proposalAdapter(source.proposal),
       };
